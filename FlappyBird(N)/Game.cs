@@ -20,9 +20,9 @@ namespace FlappyBird_N_
         public Game()
         {
             InitializeComponent();
+            timer.Start();
             Start();
-            Invalidate();
-            timer.Enabled = true;
+            Invalidate();            
         }
 
         public void Start()
@@ -30,6 +30,8 @@ namespace FlappyBird_N_
             bird = new Bird(200,200);
             wall_1 = new Wall(400, -50, true);
             wall_2 = new Wall(400, 300);
+            label1.Text = "Счет: 0";
+            timer.Start();
         }
         
         private void Game_Paint(object sender, PaintEventArgs e)
@@ -42,10 +44,13 @@ namespace FlappyBird_N_
 
         private void Game_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Space)
             {
-                gravity = 0;
-                bird.flight = -0.16f;
+                if (bird.play == true)
+                {
+                    gravity = 0;
+                    bird.flight = -0.16f;
+                }
             }
         }
 
@@ -60,18 +65,59 @@ namespace FlappyBird_N_
         {
             if(bird.x > wall_1.x+300)
             {
-                wall_1 = new Wall(600, -50, true);
-                wall_2 = new Wall(600, 300);
+                Random random = new Random();
+                int y = random.Next(-100,0);
+                wall_1 = new Wall(600, y, true);
+                wall_2 = new Wall(600, y+350);
+                bird.score++;
+                label1.Text = "Счет: "+bird.score;
+
             }
+        }
+
+        private bool Collision(Bird bird, Wall wall)
+        {
+            PointF point = new PointF();
+            point.X = (bird.x + bird.size / 2) - (wall.x + wall.size_X / 2);
+            point.Y = (bird.y + bird.size / 2) - (wall.y + wall.size_Y / 2);
+            if (Math.Abs(point.X) <= bird.size / 2 + wall.size_X / 2)
+            {
+                if (Math.Abs(point.Y) <= bird.size / 2 + wall.size_Y / 2)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            if (bird.y > 510)
+            {
+                gravity = 0;
+                bird.play = false;
+                timer.Stop();
+                Start();
+            }
+
+            if (Collision(bird, wall_1) == true || Collision(bird, wall_2) == true)
+            {
+                gravity = 0;
+                bird.play = false;
+                timer.Stop();
+                Start();
+            }
+
             if (bird.flight != 0.1f)
                 bird.flight += 0.005f;
             gravity += bird.flight;
             bird.y += gravity;
-            MoveWall();
+
+            if (bird.play == true)
+            {
+                MoveWall();
+            }
+
             Invalidate();
         }
     }

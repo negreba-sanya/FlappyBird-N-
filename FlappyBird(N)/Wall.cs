@@ -21,7 +21,7 @@ namespace FlappyBird_N_
             this.y = y;
             size_X = 60;
             size_Y = 180;
-            wall_image = new Bitmap("C:\\Users\\Alexander\\Desktop\\tube.png");
+            wall_image = new Bitmap(FlappyBird_N_.Properties.Resources.tube);
             if (Rotated == true)
             {
                 wall_image.RotateFlip(RotateFlipType.Rotate180FlipX);

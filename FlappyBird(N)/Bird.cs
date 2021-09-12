@@ -14,15 +14,17 @@ namespace FlappyBird_N_
         public float size;
         public float flight;
         public Image bird_image;
+        public bool play;
+        public int score;
 
         public Bird(float x, float y)
         {
             this.x = x;
             this.y = y;
             size = 50;
-            bird_image = new Bitmap("C:\\Users\\Alexander\\Desktop\\bird.png");
+            bird_image = new Bitmap(FlappyBird_N_.Properties.Resources.bird);
             flight = 0.1f;
-            
+            play = true;
         }
     }
 }
