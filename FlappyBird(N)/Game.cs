@@ -84,7 +84,7 @@ namespace FlappyBird_N_
             {
                 if (Math.Abs(point.Y) <= bird.size / 2 + wall.size_Y / 2)
                 {
-                    return true;
+                        return true;                    
                 }
             }
             return false;
@@ -105,8 +105,17 @@ namespace FlappyBird_N_
                 gravity = 0;
                 bird.play = false;
                 timer.Stop();
-                Start();
-            }
+
+                DialogResult result = MessageBox.Show("Начать заново?", "Вы проиграли", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    Start();
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            }            
 
             if (bird.flight != 0.1f)
                 bird.flight += 0.005f;
